@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cirrhosis Case Practice</title>
+<style>
+:root{--plum:#2E1A47;--navy:#1F2A44;--gold:#F2C14E;--teal:#1BA39C;--mint:#DFF5E8;--bad:#FDE2E4;--ink:#1E1E1E;--muted:#5b6170;--bg:#F6F4FB;}
+*{box-sizing:border-box}
+body{margin:0;font-family:Calibri,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.5}
+header{background:var(--plum);color:#fff;padding:28px 16px 22px}
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+header h1{margin:0 0 4px;font-size:28px}
+header p{margin:0;color:#E9D8FD}
+.bar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #e5e1ef}
+.bar .wrap{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 16px;flex-wrap:wrap}
+.tabs button{border:0;background:#ECE7F6;color:var(--plum);font-weight:700;padding:8px 14px;border-radius:999px;margin-right:6px;cursor:pointer;font-size:15px}
+.tabs button.on{background:var(--plum);color:#fff}
+.score{font-weight:700;color:var(--plum)}
+section{display:none;padding:20px 0 40px}
+section.on{display:block}
+.card{background:#fff;border-radius:14px;padding:18px;margin:16px 0;border-left:8px solid var(--c);box-shadow:0 2px 6px rgba(30,20,60,.06)}
+.pill{display:inline-block;font-size:13px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--c);color:#fff;margin-bottom:8px}
+.stem{font-size:17px;margin:4px 0 12px}
+.opt{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;border:2px solid #E3DEEF;background:#fff;border-radius:10px;padding:10px 12px;margin:7px 0;font-size:16px;cursor:pointer;font-family:inherit;color:inherit}
+.opt:hover:not(:disabled){border-color:var(--c)}
+.opt b{flex:0 0 28px;height:28px;border-radius:50%;background:var(--gold);color:var(--plum);display:flex;align-items:center;justify-content:center}
+.opt.right{border-color:#2E9E5B;background:var(--mint)}
+.opt.wrong{border-color:#B4232A;background:var(--bad)}
+.opt:disabled{cursor:default}
+.why{display:none;background:var(--mint);border-radius:10px;padding:12px 14px;margin-top:10px;font-size:15px}
+.why.show{display:block}
+.why.bad{background:#FFF4E5}
+.why ul{margin:6px 0 0 18px;padding:0}
+.mrow{display:grid;grid-template-columns:1fr minmax(180px,1.3fr) 28px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed #E3DEEF}
+.mrow select{width:100%;padding:8px;border-radius:8px;border:2px solid #E3DEEF;font-size:15px;font-family:inherit;background:#fff}
+.mrow .mk{font-weight:700;font-size:18px;text-align:center}
+.btn{border:0;background:var(--plum);color:#fff;font-weight:700;padding:10px 18px;border-radius:10px;font-size:15px;cursor:pointer;margin-top:12px;margin-right:8px}
+.btn.alt{background:#ECE7F6;color:var(--plum)}
+.summary{background:#fff;border-radius:14px;padding:20px;margin-top:20px;border:2px solid var(--gold)}
+.ans{font-size:14px;color:#0F5132;margin-top:3px;grid-column:1/-1;display:none}
+.ans.show{display:block}
+@media (max-width:600px){.mrow{grid-template-columns:1fr 28px}.mrow select{grid-column:1/2}header h1{font-size:24px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Cirrhosis: Case Practice</h1><p>Pathology · MBBS Year 2 · Clinical vignettes and matching</p></div></header>
+<div class="bar"><div class="wrap">
+  <div class="tabs"><button id="t1" class="on" onclick="tab(1)">Case MCQs</button><button id="t2" onclick="tab(2)">Matching</button></div>
+  <div class="score" id="score">Score: 0 / 0</div>
+</div></div>
+<div class="wrap">
+<section id="s1" class="on"><div id="mcqs"></div>
+  <div class="summary" id="sum1"></div>
+  <button class="btn alt" onclick="resetAll()">Start again</button>
+</section>
+<section id="s2"><div id="matches"></div></section>
+</div>
+<script>
+const COLORS=["#7B3FA0","#1BA39C","#D9822B","#2E6FD8","#C2185B","#3F8F4F"];
+const Q=[
+{s:"A 47-year-old man with chronic hepatitis B has a liver biopsy. Which finding must be present before the pathologist can report cirrhosis?",o:["Steatosis in more than 5% of hepatocytes","Ground-glass hepatocytes","Bridging fibrous septa surrounding regenerative nodules throughout the liver","Dense lymphocytic infiltrate in portal tracts","Scattered acidophil (Councilman) bodies"],a:2,w:"Cirrhosis needs diffuse bridging fibrosis, regenerative nodules and loss of normal architecture.",x:["Steatosis, portal inflammation and acidophil bodies are features of hepatitis or fatty liver, not cirrhosis itself.","Ground-glass cells point to HBV as the cause but say nothing about the stage."]},
+{s:"A 49-year-old man with hypertension, a waist of 112 cm, fasting glucose 7.8 mmol/L and high triglycerides has a firm nodular liver. He drinks about two units of alcohol a week. Viral, autoimmune and metabolic screens are negative. What is the most likely cause?",o:["Alcohol-related liver disease","Metabolic dysfunction-associated steatotic liver disease (MASLD)","Autoimmune hepatitis","Haemochromatosis","Primary sclerosing cholangitis"],a:1,w:"Metabolic risk factors with minimal alcohol and a negative screen fit MASLD, the term that replaced NAFLD.",x:["Two units a week is far below the threshold for alcohol-related disease.","AIH and haemochromatosis would show on the autoimmune and iron screens.","PSC is a cholestatic disease, usually with inflammatory bowel disease."]},
+{s:"A 55-year-old man has diabetes, bronze skin pigmentation and cirrhosis. Serum ferritin is 2400 ng/mL and transferrin saturation is 85%. Which stain on his liver biopsy would best confirm the cause?",o:["Perls Prussian blue","PAS after diastase","Rhodanine","Masson trichrome","Reticulin"],a:0,w:"Perls stain shows haemosiderin as blue granules in hepatocytes, confirming iron overload (haemochromatosis).",x:["PAS-diastase: α1-antitrypsin globules.","Rhodanine: copper (Wilson disease).","Trichrome and reticulin show fibrosis and architecture, not the cause."]},
+{s:"A 17-year-old girl has a tremor, slurred speech and falling school grades. Slit-lamp examination shows a golden-brown ring at the edge of the cornea, and serum caeruloplasmin is low. Her liver is cirrhotic. What is the underlying disorder?",o:["α1-antitrypsin deficiency","Hereditary haemochromatosis","Wilson disease","Autoimmune hepatitis","Primary biliary cholangitis"],a:2,w:"Kayser-Fleischer rings, neuropsychiatric features and low caeruloplasmin in a young patient point to Wilson disease (ATP7B, copper accumulation).",x:["α1-AT deficiency affects lung and liver, not the brain or cornea.","Haemochromatosis presents later in life with iron overload.","AIH and PBC do not cause corneal rings or neurological signs."]},
+{s:"A biopsy from a man with long-standing hepatitis C shows thick collagen bands. Which cell is the main source of this collagen?",o:["Kupffer cell","Hepatocyte","Sinusoidal endothelial cell","Hepatic stellate cell","Cholangiocyte"],a:3,w:"Activated hepatic stellate cells in the space of Disse turn into myofibroblast-like cells and lay down type I and III collagen under TGF-β.",x:["Kupffer cells release the cytokines that activate stellate cells but do not make the collagen.","Hepatocytes and endothelial cells are injured or altered, but they are not the main collagen producers."]},
+{s:"Electron microscopy of a cirrhotic liver shows sinusoidal endothelial cells that have lost their fenestrations, with a continuous basement membrane in the space of Disse. What is the main consequence?",o:["Increased bile secretion","Impaired exchange of solutes between plasma and hepatocytes","Increased hepatocyte regeneration","Reduced portal venous pressure","Increased albumin synthesis"],a:1,w:"Capillarisation of sinusoids blocks the free movement of proteins and solutes between blood and hepatocytes, so liver function falls.",x:["It increases resistance to flow, so portal pressure rises rather than falls.","Synthetic function, including albumin, gets worse, not better."]},
+{s:"A 40-year-old woman with polycythaemia vera develops sudden right upper quadrant pain, a tender enlarged liver and rapidly building ascites. Her portal vein is patent on Doppler ultrasound. Where is the obstruction most likely to be?",o:["Portal vein (prehepatic)","Hepatic veins (posthepatic, Budd-Chiari syndrome)","Intrahepatic, from cirrhosis","Intrahepatic, from schistosomiasis","Splenic vein"],a:1,w:"A clotting tendency plus acute painful hepatomegaly and ascites suggest hepatic vein thrombosis: Budd-Chiari syndrome, a posthepatic cause of portal hypertension.",x:["The portal and splenic veins are patent.","Cirrhosis and schistosomiasis develop slowly and are not painful at onset."]},
+{s:"A 52-year-old man with alcohol-related cirrhosis suddenly vomits a large amount of bright red blood and becomes hypotensive. Which portosystemic connection has most likely ruptured?",o:["Superior rectal to middle rectal veins","Paraumbilical to superficial epigastric veins","Left gastric to oesophageal (azygos) veins","Retroperitoneal veins to the renal veins","Splenic to left renal vein"],a:2,w:"Oesophageal varices form where the left gastric (portal) and oesophageal/azygos (systemic) veins meet. Rupture causes massive haematemesis.",x:["Rectal anastomoses bleed per rectum.","Paraumbilical veins give caput medusae.","Retroperitoneal and spleno-renal shunts rarely cause haematemesis."]},
+{s:"A 48-year-old man with cirrhosis notices tender swelling of both breasts and shrinking testes. What is the main mechanism?",o:["Prolactin-secreting pituitary tumour","Reduced hepatic breakdown of oestrogen","Low serum albumin","Raised serum ammonia","Hypersplenism"],a:1,w:"The failing liver clears less oestrogen and more androgen is converted to oestrogen. The result is gynaecomastia, testicular atrophy, palmar erythema and spider angiomas.",x:["No pituitary lesion is needed to explain it.","Albumin, ammonia and the spleen explain other features (oedema, encephalopathy, low platelets)."]},
+{s:"A 61-year-old woman with cirrhosis and ascites has mild abdominal pain and a low-grade fever. Ascitic fluid shows 310 neutrophils/mm³. There is no free gas on imaging. What is the next step in reasoning?",o:["This count is normal for cirrhotic ascites","It confirms spontaneous bacterial peritonitis","It suggests tuberculous peritonitis","It means hepatorenal syndrome has developed","It points to a perforated bowel"],a:1,w:"An ascitic neutrophil count of 250/mm³ or more, with no surgical source, is diagnostic of SBP. Treat even before the culture result.",x:["Normal ascites has under 250 neutrophils/mm³.","TB ascites is lymphocyte-rich.","Perforation causes free gas, guarding and mixed organisms."]},
+{s:"A 58-year-old man with cirrhosis and tense ascites has falling urine output over a week. Creatinine rises from 1.1 to 2.9 mg/dL. Urine sodium is below 10 mmol/L, there is no proteinuria, and the kidneys look normal on ultrasound. Creatinine does not improve after albumin infusion. What is the most likely diagnosis?",o:["Acute tubular necrosis","Hepatorenal syndrome","Post-renal obstruction","Glomerulonephritis","Prerenal failure from diuretics alone"],a:1,w:"Kidney failure with structurally normal kidneys, avid sodium retention and no response to volume expansion fits hepatorenal syndrome: intense renal vasoconstriction secondary to splanchnic vasodilation.",x:["ATN usually shows high urine sodium and casts.","Obstruction would show hydronephrosis.","GN gives proteinuria or haematuria.","Pure prerenal failure improves with volume."]},
+{s:"A patient with cirrhosis has no encephalopathy, mild ascites, bilirubin 2.5 mg/dL, albumin 3.1 g/dL and INR 1.5. What is the Child-Pugh class?",o:["Class A","Class B","Class C","Cannot be graded without creatinine","Cannot be graded without platelet count"],a:1,w:"Encephalopathy 1 + mild ascites 2 + bilirubin 2 + albumin 2 + INR 1 = 8 points, which is Class B (7-9).",x:["Creatinine is part of MELD, not Child-Pugh.","Platelet count is not part of either score."]}
+];
+const M=[
+{t:"Mr. A's findings and their mechanisms",rows:[["Haematemesis","Ruptured oesophageal varices"],["Gynaecomastia","Liver breaks down less oestrogen"],["Engorged abdominal wall veins","Reopened paraumbilical veins"],["Prolonged prothrombin time","Less hepatic synthesis of clotting factors"],["Ascites","Portal hypertension, low albumin and sodium retention"],["Parotid enlargement and Dupuytren's contracture","Chronic alcohol use rather than liver failure"]]},
+{t:"Cause of cirrhosis and its biopsy clue",rows:[["Alcohol-related liver disease","Mallory-Denk bodies with steatosis"],["Chronic hepatitis B","Ground-glass hepatocytes"],["α1-antitrypsin deficiency","PAS-positive, diastase-resistant globules"],["Haemochromatosis","Heavy Perls-positive iron in hepatocytes"],["Wilson disease","Copper on rhodanine stain"],["Autoimmune hepatitis","Interface hepatitis rich in plasma cells"]]}
+];
+let st={mcq:{},match:{}};
+try{const s=localStorage.getItem("cirrhosisQuizV1");if(s)st=JSON.parse(s);}catch(e){}
+function save(){try{localStorage.setItem("cirrhosisQuizV1",JSON.stringify(st));}catch(e){}}
+function tab(n){[1,2].forEach(i=>{document.getElementById("s"+i).classList.toggle("on",i===n);document.getElementById("t"+i).classList.toggle("on",i===n);});window.scrollTo(0,0);}
+function renderMCQ(){
+  const box=document.getElementById("mcqs");box.innerHTML="";
+  Q.forEach((q,i)=>{
+    const c=COLORS[i%COLORS.length];const d=document.createElement("div");d.className="card";d.style.setProperty("--c",c);
+    let h=`<span class="pill">Case ${i+1}</span><div class="stem">${q.s}</div>`;
+    q.o.forEach((o,j)=>{h+=`<button class="opt" data-q="${i}" data-o="${j}"><b>${"ABCDE"[j]}</b><span>${o}</span></button>`;});
+    h+=`<div class="why" id="w${i}"></div>`;d.innerHTML=h;box.appendChild(d);
+  });
+  box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const i=+b.dataset.q;if(st.mcq[i]!==undefined)return;st.mcq[i]=+b.dataset.o;save();paint(i);score();});
+  Q.forEach((q,i)=>{if(st.mcq[i]!==undefined)paint(i);});score();
+}
+function paint(i){
+  const q=Q[i],pick=st.mcq[i];
+  document.querySelectorAll(`.opt[data-q="${i}"]`).forEach(b=>{const j=+b.dataset.o;b.disabled=true;if(j===q.a)b.classList.add("right");else if(j===pick)b.classList.add("wrong");});
+  const w=document.getElementById("w"+i);const ok=pick===q.a;
+  w.className="why show"+(ok?"":" bad");
+  w.innerHTML=`<strong>${ok?"✓ Correct.":"✗ Not quite. The answer is "+"ABCDE"[q.a]+"."}</strong> ${q.w}<ul>${q.x.map(t=>"<li>"+t+"</li>").join("")}</ul>`;
+}
+function score(){
+  const done=Object.keys(st.mcq).length;const right=Object.entries(st.mcq).filter(([i,v])=>Q[i].a===v).length;
+  document.getElementById("score").textContent=`Score: ${right} / ${done}`;
+  const s=document.getElementById("sum1");
+  if(done<Q.length){s.innerHTML=`<strong>${done} of ${Q.length} cases answered.</strong> Keep going.`;}
+  else{const p=Math.round(right/Q.length*100);s.innerHTML=`<h3 style="margin:0 0 6px;color:var(--plum)">You scored ${right} / ${Q.length} (${p}%)</h3>${p>=80?"Strong work. Try the matching exercises next.":p>=50?"A fair start. Re-read the explanations for the ones you missed, then try again.":"Go back over the lecture slides on causes, portal hypertension and complications, then try again."}`;}
+}
+function shuffle(a,seed){a=a.slice();let x=seed;for(let i=a.length-1;i>0;i--){x=(x*9301+49297)%233280;const j=Math.floor(x/233280*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function renderMatch(){
+  const box=document.getElementById("matches");box.innerHTML="";
+  M.forEach((m,k)=>{
+    const c=COLORS[(k+2)%COLORS.length];const opts=shuffle(m.rows.map(r=>r[1]),k+7);
+    const d=document.createElement("div");d.className="card";d.style.setProperty("--c",c);
+    let h=`<span class="pill">Matching ${k+1}</span><div class="stem"><strong>${m.t}</strong><br><span style="color:var(--muted);font-size:15px">Pick the best match for each item. Each answer is used once.</span></div>`;
+    m.rows.forEach((r,i)=>{h+=`<div class="mrow"><div>${r[0]}</div><select data-m="${k}" data-r="${i}"><option value="">Choose…</option>${opts.map(o=>`<option>${o}</option>`).join("")}</select><div class="mk" id="mk${k}_${i}"></div><div class="ans" id="an${k}_${i}">Answer: ${r[1]}</div></div>`;});
+    h+=`<button class="btn" onclick="check(${k})">Check answers</button><button class="btn alt" onclick="clearM(${k})">Clear</button><div id="mres${k}" style="margin-top:10px;font-weight:700;color:var(--plum)"></div>`;
+    d.innerHTML=h;box.appendChild(d);
+  });
+  box.querySelectorAll("select").forEach(s=>{const k=s.dataset.m,i=s.dataset.r;const v=(st.match[k]||{})[i];if(v)s.value=v;
+    s.onchange=()=>{st.match[k]=st.match[k]||{};st.match[k][i]=s.value;save();};});
+}
+function check(k){
+  let n=0;M[k].rows.forEach((r,i)=>{const s=document.querySelector(`select[data-m="${k}"][data-r="${i}"]`);const ok=s.value===r[1];if(ok)n++;
+    const mk=document.getElementById(`mk${k}_${i}`);mk.textContent=ok?"✓":"✗";mk.style.color=ok?"#2E9E5B":"#B4232A";
+    s.style.borderColor=ok?"#2E9E5B":"#B4232A";document.getElementById(`an${k}_${i}`).classList.toggle("show",!ok);});
+  document.getElementById("mres"+k).textContent=`${n} / ${M[k].rows.length} correct`;
+}
+function clearM(k){st.match[k]={};save();renderMatch();}
+function resetAll(){st={mcq:{},match:{}};save();renderMCQ();renderMatch();window.scrollTo(0,0);}
+renderMCQ();renderMatch();
+</script>
+</body>
+</html>
